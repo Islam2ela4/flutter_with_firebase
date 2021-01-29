@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firbase/model/user.dart';
+import 'package:firbase/business_logic/models/user.dart';
 
 abstract class DataRepository{
   Stream<QuerySnapshot> getStream();

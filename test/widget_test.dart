@@ -8,7 +8,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:firbase/main.dart';
+import 'file:///C:/Users/infinitu/AndroidStudioProjects/flutterProjects/firbase/lib/ui/main.dart';
 
 void main() {
   testWidgets('Counter increments smoke test', (WidgetTester tester) async {

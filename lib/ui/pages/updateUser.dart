@@ -1,6 +1,6 @@
 
-import 'package:firbase/model/user.dart';
-import 'package:firbase/provider/store_provider.dart';
+import 'package:firbase/business_logic/models/user.dart';
+import 'package:firbase/business_logic/view_models/store_viewmodel.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -98,7 +98,7 @@ class _UpdateUserState extends State<UpdateUser> {
   }
 
   Widget _Action(BuildContext context) {
-    StoreProvider provider = Provider.of<StoreProvider>(context);
+    Store_ViewModel provider = Provider.of<Store_ViewModel>(context);
     User _user = User(
         id: widget.user.id,
         name: sname,

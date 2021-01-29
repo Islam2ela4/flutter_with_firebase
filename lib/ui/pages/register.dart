@@ -1,10 +1,9 @@
 import 'dart:io';
 
-import 'package:firbase/model/user.dart';
-import 'package:firbase/pages/login.dart';
-import 'package:firbase/provider/auth_provider.dart';
-import 'package:firbase/provider/store_provider.dart';
-import 'package:firbase/repository/dataRepositoryImp.dart';
+import 'package:firbase/business_logic/models/user.dart';
+import 'package:firbase/business_logic/view_models/auth_viewmodel.dart';
+import 'package:firbase/business_logic/view_models/store_viewmodel.dart';
+import 'package:firbase/ui/pages/login.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -113,21 +112,21 @@ class _RegisterState extends State<Register> {
   }
 
   Widget _Action(BuildContext context){
-    AuthProvider provider = Provider.of<AuthProvider>(context);
-    // StoreProvider storeProvider = Provider.of<StoreProvider>(context);
+    Auth_ViewModel auth_viewModel = Provider.of<Auth_ViewModel>(context);
+    Store_ViewModel store_viewModel = Provider.of<Store_ViewModel>(context);
     return RaisedButton(
-      child: provider.authStatus == AuthStatus.authenticating
+      child: auth_viewModel.authStatus == AuthStatus.authenticating
           ? CircularProgressIndicator()
           : Text('Register'),
       onPressed: () async {
-        await provider
+        await auth_viewModel
             .registeration(
                 email: emailController.text.toString(),
                 password: passController.text.toString())
             .then((bool value) async {
           if (!value) {
             myKey.currentState
-                .showSnackBar(SnackBar(content: Text(provider.message)));
+                .showSnackBar(SnackBar(content: Text(auth_viewModel.message)));
           } else {
             await uploadFile();
             // print('File Url : ' + url);
@@ -136,35 +135,24 @@ class _RegisterState extends State<Register> {
                   SnackBar(content: Text('An error occurred while uploading pic.')));
             }else{
               User user = User(
-                  id: provider.auth.currentUser.uid,
+                  id: auth_viewModel.auth.currentUser.uid,
                   name: nameController.text.toString(),
                   age: int.parse(ageController.text.toString()),
                   city: cityController.text.toString(),
                   imgUrl: url
               );
-              DataRepositoryImp().addUser(user).then((value){
-                Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(
-                  builder: (context) {
-                    return Login();
-                  },
-                ), (route) => false);
-              }).catchError((e){
-                print('error from DataRepositoryImp().addUser : ' + e.toString());
-                myKey.currentState.showSnackBar(
-                    SnackBar(content: Text('Error while adding user')));
+              store_viewModel.addNewUser(user).then((bool value) {
+                if (value) {
+                  Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(
+                    builder: (context) {
+                      return Login();
+                    },
+                  ), (route) => false);
+                } else {
+                  myKey.currentState.showSnackBar(
+                      SnackBar(content: Text(store_viewModel.errorMessage)));
+                }
               });
-              // storeProvider.addnewUser(user).then((bool value) {
-              //   if (value) {
-              //     Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(
-              //       builder: (context) {
-              //         return Login();
-              //       },
-              //     ), (route) => false);
-              //   } else {
-              //     myKey.currentState.showSnackBar(
-              //         SnackBar(content: Text(storeProvider.errorMessage)));
-              //   }
-              // });
             }
           }
         });

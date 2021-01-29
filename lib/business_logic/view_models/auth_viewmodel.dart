@@ -3,13 +3,13 @@ import 'package:flutter/material.dart';
 
 enum AuthStatus { unAuthenticated, authenticating, authenticated }
 
-class AuthProvider extends ChangeNotifier {
+class Auth_ViewModel extends ChangeNotifier {
   FirebaseAuth _auth;
   String message;
   User _user;
   AuthStatus _authStatus = AuthStatus.unAuthenticated;
 
-  AuthProvider(){
+  Auth_ViewModel(){
     _auth = FirebaseAuth.instance;
     _auth.authStateChanges().listen((User user) {
       if(user == null){
@@ -26,7 +26,7 @@ class AuthProvider extends ChangeNotifier {
     try{
       _authStatus = AuthStatus.authenticating;
       notifyListeners();
-      UserCredential credential = await _auth.createUserWithEmailAndPassword(
+      await _auth.createUserWithEmailAndPassword(
           email: email, password: password);
       _authStatus = AuthStatus.authenticated;
       notifyListeners();

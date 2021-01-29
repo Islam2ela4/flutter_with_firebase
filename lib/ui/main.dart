@@ -1,8 +1,8 @@
 
-import 'package:firbase/pages/home.dart';
-import 'package:firbase/pages/login.dart';
-import 'package:firbase/provider/auth_provider.dart';
-import 'package:firbase/provider/store_provider.dart';
+import 'package:firbase/business_logic/view_models/auth_viewmodel.dart';
+import 'package:firbase/business_logic/view_models/store_viewmodel.dart';
+import 'package:firbase/ui/pages/home.dart';
+import 'package:firbase/ui/pages/login.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -15,10 +15,10 @@ void main() async {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(
-          create: (context) => AuthProvider(),
+          create: (context) => Auth_ViewModel(),
         ),
         ChangeNotifierProvider(
-          create: (context) => StoreProvider(),
+          create: (context) => Store_ViewModel(),
         ),
       ],
       child: MyApp(),
@@ -36,8 +36,8 @@ class MyApp extends StatelessWidget {
   }
 
   Widget _view(BuildContext context) {
-    var authProvider = Provider.of<AuthProvider>(context);
-    switch (authProvider.authStatus) {
+    var auth_viewmodel = Provider.of<Auth_ViewModel>(context);
+    switch (auth_viewmodel.authStatus) {
       case AuthStatus.authenticating:
       case AuthStatus.authenticated:
         return Home();

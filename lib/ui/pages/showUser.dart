@@ -1,8 +1,9 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firbase/model/user.dart';
-import 'package:firbase/repository/dataRepositoryImp.dart';
+import 'package:firbase/business_logic/models/user.dart';
+import 'package:firbase/business_logic/view_models/store_viewmodel.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class ShowUser extends StatefulWidget {
   String documentId;
@@ -17,6 +18,7 @@ class _ShowUserState extends State<ShowUser> {
 
   @override
   Widget build(BuildContext context) {
+    Store_ViewModel store_viewModel = Provider.of<Store_ViewModel>(context);
     return Scaffold(
       key: myKey,
       appBar: AppBar(
@@ -24,7 +26,7 @@ class _ShowUserState extends State<ShowUser> {
         title: Text('Show'),
       ),
       body: FutureBuilder(
-        future: DataRepositoryImp().getCustomUser(widget.documentId),
+        future: store_viewModel.getUser(widget.documentId),
         builder: (context, snapshot) {
           if(!snapshot.hasData){
             return Center(child: CircularProgressIndicator(),);

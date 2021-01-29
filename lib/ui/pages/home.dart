@@ -1,19 +1,19 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firbase/model/user.dart';
-import 'package:firbase/pages/login.dart';
-import 'package:firbase/pages/showUser.dart';
-import 'package:firbase/pages/updateUser.dart';
-import 'package:firbase/provider/auth_provider.dart';
-import 'package:firbase/repository/dataRepositoryImp.dart';
+import 'package:firbase/business_logic/models/user.dart';
+import 'package:firbase/business_logic/view_models/auth_viewmodel.dart';
+import 'package:firbase/business_logic/view_models/store_viewmodel.dart';
+import 'package:firbase/ui/pages/login.dart';
+import 'package:firbase/ui/pages/showUser.dart';
+import 'package:firbase/ui/pages/updateUser.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class Home extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    AuthProvider authProvider =
-        Provider.of<AuthProvider>(context);
+    Auth_ViewModel auth_viewModel = Provider.of<Auth_ViewModel>(context);
+    Store_ViewModel store_viewModel = Provider.of<Store_ViewModel>(context);
     return Scaffold(
       appBar: AppBar(
         title: Text('Firebase'),
@@ -21,7 +21,7 @@ class Home extends StatelessWidget {
           IconButton(
             icon: Icon(Icons.logout),
             onPressed: () async {
-              await authProvider.log_out();
+              await auth_viewModel.log_out();
               Navigator.of(context).pushReplacement(MaterialPageRoute(
                 builder: (context) {
                   return Login();
@@ -32,7 +32,7 @@ class Home extends StatelessWidget {
         ],
       ),
       body: StreamBuilder<QuerySnapshot>(
-        stream: DataRepositoryImp().getStream(),
+        stream: store_viewModel.getAllUsers(),
         builder: (context, snapshot) {
           if(!snapshot.hasData){
             return LinearProgressIndicator();

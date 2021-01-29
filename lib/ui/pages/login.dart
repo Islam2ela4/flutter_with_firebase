@@ -1,6 +1,6 @@
 
-import 'package:firbase/pages/register.dart';
-import 'package:firbase/provider/auth_provider.dart';
+import 'package:firbase/business_logic/view_models/auth_viewmodel.dart';
+import 'package:firbase/ui/pages/register.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -19,7 +19,7 @@ class _LoginState extends State<Login> {
 
   @override
   Widget build(BuildContext context) {
-    var prov = Provider.of<AuthProvider>(context);
+    var prov = Provider.of<Auth_ViewModel>(context);
     return Scaffold(
       key: loginKey,
       body: Padding(
