@@ -24,7 +24,7 @@ class _RegisterState extends State<Register> {
 
   var myKey = GlobalKey<ScaffoldState>();
 
-  //
+  // storage
   File _image;
   final picker = ImagePicker();
   String url;
